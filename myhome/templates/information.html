@@ -1,0 +1,90 @@
+{%extends "base.html"%}
+{%block title%}
+    news
+{%endblock%}
+{%load static%}
+{%block content%}
+<div class="container">
+  
+  <div class="post-preview">
+        <img src="{{post.image.url}}" alt="">
+        <h2 class="post-title">{{post.title}}</h2>
+        <h3 class="post-">{{post.body}}</h3>
+   </div>
+    <p class="post-meta">
+        Posted by
+        <a href="#!">Start Bootstrap</a>
+        {{post.datetime}}
+    </p>
+ 
+  
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-12 col-lg-12">
+      <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+        <div class="card-body p-4">
+          <div class="form-outline mb-4">
+            {% if user.is_authenticated %}
+            
+            <form method="post" action="{% url 'comment'  %}">
+              {% csrf_token %}
+
+              <input type="hidden" name="postid" value="{{post.id}}">
+              <input type="hidden" name="slug" value="{{post.slug}}">
+              <input type="hidden" name="username" value="{{user.username}}">
+            <input type="text" id="addANote" class="form-control" name="body" placeholder="Type comment..." />
+            <button class="form-label" for="addANote">+ Add a note</button>
+          </form>
+            {%endif %}
+          
+          </div>
+          {% for comment in comments %}
+          <div class="card mb-4">
+            <div class="card-body">
+              {{comment.body}}
+        
+              <div class="d-flex justify-content-between">
+                <div class="d-flex flex-row align-items-center">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(4).webp" alt="avatar" width="25"
+                    height="25" />
+                  <p class="small mb-0 ms-2">
+                    {{comment.username}}
+                  </p>
+                </div>
+                <div class="d-flex flex-row align-items-center">
+                  <p class="small text-muted mb-0">Upvote?</p>
+                  <i class="far fa-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                  <p class="small text-muted mb-0">3</p>
+                </div>
+              </div>
+              
+            </div>
+            {% comment %} <form method="post" action="{% url 'comment'  %}">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">username</label>
+                <input type="text" class="form-control" id="*" aria-describedby="emailHelp" name="username">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              </div>
+              <input type="hidden" name="postid" value="{{post.id}}">
+              <input type="hidden" name="slug" value="{{post.slug}}">
+            
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">comment</label>
+                <div class="form-floating">
+                  <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="body"></textarea>
+                  <label for="floatingTextarea2">Comments</label>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form> {% endcomment %}
+        </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  
+  {%endblock%}
+
+
